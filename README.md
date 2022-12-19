@@ -1,14 +1,24 @@
 ---
 title: "NTNB-principal_2045"
-author: ""Allan Arthur A. Oliveira - Contato: [@Econo.Arthur](https://www.instagram.com/econo.arthur/) - Email: econo.arthur@gmail.com"
+author: "Allan Arthur A. Oliveira - Contato: [<span style='color:blue'>@Econo.Arthur</span>](https://www.instagram.com/econo.arthur/) - Email: <span style='color:blue'> econo.arthur@gmail.com </span>" 
 date: "`r format(Sys.time(), '%d de %B de %Y')`"
 output:
   pdf_document: default
   github_document: default
-  html_document: default
-
+  html_document: 
+    df_print: paged
+lang: pt-br
+always_allow_html: true
 ---
 
+```{r setup, include=FALSE, results = "hide", warning = FALSE, message = FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+def.chunk.hook  <- knitr::knit_hooks$get("chunk")
+knitr::knit_hooks$set(chunk = function(x, options) {
+  x <- def.chunk.hook(x, options)
+  ifelse(options$size != "normalsize", paste0("\\", options$size,"\n\n", x, "\n\n \\normalsize"), x)
+})
+```
 
 # Análise do preço do título NTNB-principal até 19-12-2022
 
@@ -26,11 +36,14 @@ library(plotly)
 
 fonte: <https://cdn.tesouro.gov.br/sistemas-internos/apex/producao/sistemas/sistd/2022/NTN-B_Principal_2022.xls>
 
+```{r, include=FALSE, echo=FALSE}
+pathfile <- "D:/ANALISE_MACRO/Repo/Insight_basic_V1/NTN-B_Principal_2022.xls"
+```
+
 ```{r}
 ntnb_principal <- readxl::read_excel(
   col_names = TRUE, skip = 1,
-  "D:/ANALISE_MACRO/Repo/Insight_basic_V1/NTN-B_Principal_2022.xls", 
-  sheet = "NTN-B Princ 150545",
+  pathfile, sheet = "NTN-B Princ 150545",
   col_types = c("guess", "numeric", "numeric", "numeric", "numeric", "numeric"))
 ntnb_principal
 ntnb_principal[,1] <- as.data.frame(as.Date(ntnb_principal$Dia, "%d/%m/%Y"))
@@ -59,10 +72,10 @@ ntnb_principal <- janitor::clean_names(ntnb_principal)
 qtd_adq <- qtd_tt * v_apl
 # nova variavel - variação do valor conforme preço de venda
 var_vlortt <- qtd_adq * ntnb_principal$pu_venda_manha
-ntnb_principal[,"preco_venda_variacao_preco"] <- var_vlortt 
+ntnb_principal[,"preco_venda_variação_preço"] <- var_vlortt 
 # nova variavel - variação do valor conforme preço de compra
 var_valortt_c <- qtd_adq * ntnb_principal$pu_compra_manha
-ntnb_principal[,"preco_compra_variacao_preco"] <- var_valortt_c 
+ntnb_principal[,"preco_compra_variação_preço"] <- var_valortt_c 
 # Conversão da taxa de anual para diária
 tx_dd <- ((1+ntnb_principal$taxa_venda_manha)^(1/360))-1
 # nova variavel - variação do valor conforme a taxa de venda 
@@ -78,22 +91,24 @@ vfr_ifx <- bind_rows(vfr_ifx, df_prov)
 vfr_ifx <- vfr_ifx[, -1]
 vfr_ifx[, "valor_teorico_taxa_contratada"] <- as.data.frame(vfr_ifx$`(1 + iD)^(0:27) * v_apl`)
 vfr_ifx <- vfr_ifx[, -1]
-
 # convertendo para DF e renomeando a variavel
 ntnb_principal[,"valor_teorico_taxa_contratada"] <- vfr_ifx$valor_teorico_taxa_contratada
-
 ntnb_principal
 ```
 
 ##### Plotando o gráfico
 
-```{r, fig.width = 15, fig.height = 10}
+```{r, fig.width = 15, fig.height = 10, cache = TRUE, echo=TRUE}
 colnames(ntnb_principal)
-View(ntnb_principal)
 # Criando o Plot
-p1 <- ggplot(ntnb_principal, aes(x = dia, y = preco_venda_variacao_preco, col = "Valor à Taxa Contratada"))+
-  geom_line(aes(y = preco_venda_variacao_preco, col = "Preço à marcação de \nmercado conforme preço \nde venda diário\n"))+
-  geom_line(aes(y = preco_compra_variacao_preco, col = "Preço à marcação de \nmercado conforme preço \nde compra diário\n"))+
+p1 <- ggplot(ntnb_principal, aes(x = dia, y = preco_venda_variação_preço,
+                                 col = "Valor à Taxa Contratada"))+
+  geom_line(aes(y = preco_venda_variação_preço, col = "Preço à marcação de
+                \nmercado conforme preço 
+                \nde venda diário\n"))+
+  geom_line(aes(y = preco_compra_variação_preço, col = "Preço à marcação de
+                \nmercado conforme preço 
+                \nde compra diário\n"))+
   geom_line(aes(y = var_valor_conforme_taxa_titulo, col = "Preço à Taxa Real Diária\n"))+
   geom_line(aes(y = valor_teorico_taxa_contratada, col = "Valor Futuro da Apl no tempo\n"))+
   labs(title = "Comparação entre os Preços do IPCA+2045 (5,49%) no perído de 2022",
@@ -106,5 +121,6 @@ p1 <- ggplot(ntnb_principal, aes(x = dia, y = preco_venda_variacao_preco, col = 
   coord_cartesian(ylim = c(180, 235))+ 
   theme_bw()
 # Plotando o gráfico interativo
+p1
 ggplotly(p1)
 ```
