@@ -1,7 +1,7 @@
 ---
 title: "NTNB-principal_2045"
 author: "Allan Arthur A. Oliveira \nContato [@Econo.Arthur](https://www.instagram.com/econo.arthur/) "
-contact: '@Econo.Arthur'
+contact: '[@Econo.Arthur](https://www.instagram.com/econo.arthur/)'
 date: "`r format(Sys.time(), '%d de %B de %Y')`"
 output:
   html_document: 
