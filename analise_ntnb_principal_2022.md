@@ -17,7 +17,11 @@ library(dplyr)
 library(OpenImageR)
 library(ggplot2)
 library(plotly)
+```
+##### Carregando dados
+fonte: <https://cdn.tesouro.gov.br/sistemas-internos/apex/producao/sistemas/sistd/2022/NTN-B_Principal_2022.xls>
 
+```{r}
 ntnb_principal <- readxl::read_excel(
   col_names = TRUE, skip = 1,
   "D:/ANALISE_MACRO/Repo/Insight_basic_V1/NTN-B_Principal_2022.xls", 
@@ -88,22 +92,12 @@ vfr_ifx
 # convertendo para DF e renomeando a variavel
 ntnb_principal[,"valor_teorico_taxa_contratada"] <- vfr_ifx$valor_teorico_taxa_contratada
 
-```
-
-```{stan output.var=}
-
-```
-
-```{r}
-
-```
-
 ##### Plotando o gráfico
 
 ```{r}
 colnames(ntnb_principal)
 
-# PLOT com as variaveis
+# Criando o Plot
 p1 <- ggplot(ntnb_principal, aes(x = dia, y = preco_venda_variação_preço,
                                  col = "Valor à Taxa Contratada"))+
   geom_line(aes(y = preco_venda_variação_preço, col = "Preço à marcação de
@@ -124,5 +118,6 @@ p1 <- ggplot(ntnb_principal, aes(x = dia, y = preco_venda_variação_preço,
   coord_cartesian(ylim = c(180, 235))+ 
   theme_bw()
 
+# Plotando o gráfico interativo
 ggplotly(p1)
 ```
