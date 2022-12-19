@@ -11,15 +11,6 @@ lang: pt-br
 always_allow_html: true
 ---
 
-```{r setup, include=FALSE, results = "hide", warning = FALSE, message = FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-def.chunk.hook  <- knitr::knit_hooks$get("chunk")
-knitr::knit_hooks$set(chunk = function(x, options) {
-  x <- def.chunk.hook(x, options)
-  ifelse(options$size != "normalsize", paste0("\\", options$size,"\n\n", x, "\n\n \\normalsize"), x)
-})
-```
-
 # Análise do preço do título NTNB-principal até 19-12-2022
 
 ##### Carregando pacotes
