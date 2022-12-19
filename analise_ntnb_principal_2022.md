@@ -1,6 +1,8 @@
 ---
 title: "NTNB-principal_2045"
 output: github_document
+Autor: Allan Arthur A. Oliveira
+Contato: @Econo.Arthur
 ---
 
 ```{r setup, include=FALSE}
