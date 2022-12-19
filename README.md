@@ -1,12 +1,18 @@
 ---
 title: "NTNB-principal_2045"
+author: "Allan Arthur A. Oliveira"
+contact: "@Econo.Arthur"
 output: github_document
-Autor: Allan Arthur A. Oliveira
-Contato: @Econo.Arthur
+
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+def.chunk.hook  <- knitr::knit_hooks$get("chunk")
+knitr::knit_hooks$set(chunk = function(x, options) {
+  x <- def.chunk.hook(x, options)
+  ifelse(options$size != "normalsize", paste0("\\", options$size,"\n\n", x, "\n\n \\normalsize"), x)
+})
 ```
 
 # Análise do preço do título NTNB-principal até 19-12-2022
