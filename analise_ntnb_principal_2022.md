@@ -1,6 +1,6 @@
 ---
 title: "NTNB-principal_2045"
-author: "Allan Arthur A. Oliveira [@Econo.Arthur](https://www.instagram.com/econo.arthur/) "
+author: "Allan Arthur A. Oliveira ![@Econo.Arthur](https://www.instagram.com/econo.arthur/) "
 contact: '@Econo.Arthur'
 date: "`r format(Sys.time(), '%d de %B de %Y')`"
 output:
@@ -11,7 +11,7 @@ output:
 lang: pt-br
 ---
 
-```{r setup, include=FALSE}
+```{r setup, include=FALSE, results = "hide", warning = FALSE, message = FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 def.chunk.hook  <- knitr::knit_hooks$get("chunk")
 knitr::knit_hooks$set(chunk = function(x, options) {
